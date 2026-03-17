@@ -4,9 +4,11 @@ Anna Ljungkvist YH2025
 
 
 
+
 Uppgift
 
 Syftet med uppgiften var att, med databasen skapad i uppgift 1 som bas, fokusera på att hantera och analysera data, arbeta med constraints, triggers och index samt säkerhetskopiera och återställa databasen.
+
 
 
 
@@ -32,6 +34,7 @@ Därefter följde en förevisning av kommandon som visade:
 * Constraint samt triggers
 * Backup samt återställning av databasen
 * Testfrågor på den återställda databasen
+
 
 
 
