@@ -5,19 +5,19 @@ Anna Ljungkvist YH2025
 
 
 
-Uppgift
+Uppgift:
 
 Syftet med uppgiften var att, med databasen skapad i uppgift 1 som bas, fokusera på att hantera och analysera data, arbeta med constraints, triggers och index samt säkerhetskopiera och återställa databasen.
 
 
 
 
-Metoder
+Metoder:
 
-ER-diagrammet uppdaterades i draw.io och relationsdatabasen skapades i MySQL.
+ER-diagrammet uppdaterades i draw.io och relationsdatabasen uppdaterades i MySQL.
 
 
-Utförande
+Utförande:
 
 Två av de ursprungliga tre kundernas namn i tabellen Kunder byttes, och ytterligare två kunder lades till i tabellen. 
 Tabellen Bocker bytte namn till Produkter och namnet på kolumnen BokID byttes till ISBN i Orderrader samt Produkter.
@@ -38,7 +38,7 @@ Därefter följde en förevisning av kommandon som visade:
 
 
 
-Reflektion och analys
+Reflektion och analys:
 
 Genom att designa en relationell databas kan vi på ett logiskt sätt särskilja de olika delarna av informationen. Detta gör att databasen kan växa - exempelvis med nya tabeller - utan att den befintliga databasen behöver byggas om. Genom användning av Primary Keys samt Foreign Keys säkerställer vi också att de olika tabellerna "hänger ihop" och därmed kan hantera information på ett smidigt sätt samt få fram korrekt efterfrågad information.
 
