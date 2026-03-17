@@ -1,0 +1,204 @@
+Anna Ljungkvist YH2025
+
+
+-- Använder databasen Bokhandel;
+USE Bokhandel;
+
+
+-- Uppdaterar befintliga kunders namn
+UPDATE Kunder
+SET Namn = 'Svante bengtsson'
+WHERE KundID = 2;
+
+
+UPDATE Kunder
+SET Namn = 'Carin Karlsson'
+WHERE KundID = 3;
+
+
+-- Infogar data i tabellen Kunder
+INSERT INTO Kunder (Namn, Adress, Telefon, Epost) VALUES
+	('Arne Johansson', 'Almlunden 5', '07211122277', 'arne.johansson@email.com'),
+	('Carin Eriksson', 'Envägen 70', '07044455566', 'carin.eriksson@email.com');
+
+
+-- Byter namn på tabellen Bocker till Produkter
+ALTER TABLE Bocker RENAME TO Produkter;
+
+
+-- Byter namn på kolumnen BokID till ISBN i Produkter
+ALTER TABLE Produkter RENAME COLUMN BokID TO ISBN;
+
+
+-- Byter namn på kolumnen BokID till ISBN i Orderrader
+ALTER TABLE Orderrader RENAME COLUMN BokID TO ISBN;
+	
+
+-- Infogar data i tabellen Produkter
+INSERT INTO Produkter (ISBN, Titel, Forfattare, Pris, Lagerstatus) VALUES
+	(1010, 'Dr Jekyll & Mr Hyde', 'Robert Louis Stevenson', 159, 50),
+	(1212, 'Utvandrarna', 'Vilhelm Moberg', 99, 25),
+	(1414, 'Partypajaren', 'Jeff Kinney', 149, 30),
+	(1616, 'Frankenstein', 'Mary Shelley', 115, 20),
+	(1818, 'Brandkårsmysteriet', 'Martin Widmark', 79, 40);
+    
+
+-- Skapar beställningar
+INSERT INTO Bestallningar (KundID, Datum) VALUES
+	(5, '2026-02-02'),
+    	(2, '2026-02-04'),
+    	(1, '2026-02-04'),
+    	(5, '2026-02-12'),
+    	(3, '2026-02-15'),
+    	(3, '2026-03-05'),
+	(2, '2026-03-08'),
+    	(3, '2026-03-10'),
+    	(1, '2026-03-11'),
+    	(5, '2026-03-11');
+    
+
+-- Skapar orderrader
+INSERT INTO Orderrader (OrderID, ISBN, Antal, Pris) VALUES
+	(1, 1414, 1, 149),  -- Kund 5 köper 1 "Partypajaren"
+	(2, 1818, 1, 79),   -- Kund 2 köper 1 "Brandkårsmysteriet"
+	(3, 1212, 1, 99),   -- Kund 1 köper 1 "Utvandrarna"
+	(4, 1414, 1, 115),  -- Kund 5 köper 1 "Frankenstein"
+	(5, 1818, 1, 79),   -- Kund 3 köper 1 "Brandkårsmysteriet"
+	(6, 1010, 1, 159),  -- Kund 3 köper 1 "Dr Jekyll & Mr Hyde"
+    	(7, 1414, 1, 149),  -- Kund 2 köper "Partypajaren"
+    	(8, 1010, 1, 159),  -- Kund 3 köper "Dr Jekyll & Mr Hyde" 
+	(9, 1010, 1, 159),  -- Kund 1 köper 1 "Dr Jekyll & Mr Hyde"
+    	(10, 1212, 1, 99);  -- Kund 5 köper 1 "Utvandrarna"
+
+
+-- Hämta data om kunder
+SELECT * FROM Kunder;
+
+
+-- Hämta data om beställningar
+SELECT * FROM Bestallningar;
+
+
+-- Filtrera kunder baserat på namn
+SELECT * FROM Kunder WHERE Namn = 'Carin Karlsson';
+
+
+-- Filtrera kunder baserat på e-post
+SELECT * FROM Kunder WHERE Epost = 'alma@email.com';
+
+
+-- Sortera produkter efter fallande pris
+SELECT * FROM Produkter ORDER BY Pris DESC;
+
+
+-- Uppdatera e-postadress på kunden Svante Bengtsson
+UPDATE Kunder 
+SET Epost = 'svante.bengtsson@email.com' 
+WHERE KundID = 2;
+
+
+-- Ta bort kund samt återställa
+START TRANSACTION;  -- För att se hur uppdateringen kommer se ut utan att det blir en permanent förändring
+
+DELETE FROM Kunder WHERE Namn = 'Arne Johansson';
+
+ROLLBACK;
+
+
+-- Visa vilka kunder som lagt beställningar
+SELECT Kunder.Namn, Bestallningar.OrderID FROM Kunder 
+INNER JOIN Bestallningar 
+ON Kunder.KundID = Bestallningar.KundID;
+
+
+--  Visa alla kunder, även de utan beställningar
+SELECT Kunder.Namn, Bestallningar.OrderID FROM Kunder 
+LEFT JOIN Bestallningar 
+ON Kunder.KundID = Bestallningar.KundID;
+
+
+-- Räkna antal beställningar per kund
+SELECT KundID, COUNT(OrderID) AS AntalBeställninar 
+FROM Bestallningar GROUP BY KundID;
+
+
+-- Visa kunder som har gjort fler än två beställningar
+SELECT Kunder.Namn, COUNT(OrderID) As Antalbeställningar FROM Bestallningar 
+INNER JOIN Kunder ON Bestallningar.KundID = Kunder.KundID 
+GROUP BY Kunder.Namn;
+
+
+-- Skapa ett index på e-post i Kunder
+ALTER TABLE Kunder ADD INDEX (Epost);
+
+
+-- Säkerställa att priset på produkter alltid är över 0
+ALTER TABLE Produkter 
+ADD CONSTRAINT Prischeck 
+CHECK (Pris > 0);
+
+
+-- Skapa trigger som minskar lagersaldo efter en order
+DELIMITER $$
+
+CREATE TRIGGER lageruppdatering
+AFTER INSERT ON Orderrader
+FOR EACH ROW
+BEGIN
+	UPDATE Produkter 
+    SET Lagerstatus = Lagerstatus - NEW.Antal
+    WHERE ISBN = NEW.ISBN;
+END $$
+
+DELIMITER ;
+
+
+-- Skapa tabell Kundlogg (inför att skapa trigger som loggar när ny kund registreras)
+CREATE TABLE Kundlogg (
+id INT AUTO_INCREMENT PRIMARY KEY,
+    KundID INT,
+    Handelse VARCHAR(100),
+    Skapad TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- Skapa trigger som loggar när ny kund registreras
+DELIMITER $$
+
+CREATE TRIGGER registrering_ny_kund
+AFTER INSERT ON Kunder
+FOR EACH ROW
+BEGIN
+    INSERT Kundlogg (KundID)
+    VALUES (NEW.KundID);  
+END $$
+
+DELIMITER ;
+
+
+-- Skapa backup av databasen i Windows Powershell
+mysqldump -u root -p Bokhandel > bokhandel_backup.sql
+
+
+-- Återställa databasen från backup i Windows Powershell
+mysqldump -u root -p Bokhandel < bokhandel_backup.sql
+
+
+-- Testfrågor på den återställda databasen:
+
+
+-- Testfråga 1: Hämta all data som finns i kolumnen Forfattare från tabellen Produkter
+SELECT Forfattare FROM Produkter;
+
+
+--Testfråga 2: Hämta all information om alla produkter och sedan sortera dem i bokstavsordning (A–Ö) baserat på deras titlar
+SELECT * FROM Produkter ORDER BY Titel;
+
+
+-- Testfråga 3: Hämta data om vilka kunder som köpt boken 'Dr Jekyll & Mr Hyde'
+SELECT DISTINCT Kunder.Namn
+FROM Kunder
+JOIN Bestallningar ON Kunder.KundID = Bestallningar.KundID
+JOIN Orderrader ON Bestallningar.OrderID = Orderrader.OrderID
+JOIN Produkter ON Orderrader.ISBN = Produkter.ISBN
+WHERE Produkter.Titel = 'Dr Jekyll & Mr Hyde';
