@@ -65,8 +65,8 @@ INSERT INTO Orderrader (OrderID, ISBN, Antal, Pris) VALUES
 	(4, 1414, 1, 115),  -- Kund 5 köper 1 "Frankenstein"
 	(5, 1818, 1, 79),   -- Kund 3 köper 1 "Brandkårsmysteriet"
 	(6, 1010, 1, 159),  -- Kund 3 köper 1 "Dr Jekyll & Mr Hyde"
-    (7, 1414, 1, 149),  -- Kund 2 köper "Partypajaren"
-    (8, 1010, 1, 159),  -- Kund 3 köper "Dr Jekyll & Mr Hyde" 
+    (7, 1414, 1, 149),  -- Kund 2 köper 1 "Partypajaren"
+    (8, 1010, 1, 159),  -- Kund 3 köper 1 "Dr Jekyll & Mr Hyde" 
 	(9, 1010, 1, 159),  -- Kund 1 köper 1 "Dr Jekyll & Mr Hyde"
     (10, 1212, 1, 99);  -- Kund 5 köper 1 "Utvandrarna"
 
