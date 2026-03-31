@@ -46,15 +46,15 @@ INSERT INTO Produkter (ISBN, Titel, Forfattare, Pris, Lagerstatus) VALUES
 -- Skapar beställningar
 INSERT INTO Bestallningar (KundID, Datum) VALUES
 	(5, '2026-02-02'),
-    	(2, '2026-02-04'),
-    	(1, '2026-02-04'),
-    	(5, '2026-02-12'),
-    	(3, '2026-02-15'),
-    	(3, '2026-03-05'),
+    (2, '2026-02-04'),
+    (1, '2026-02-04'),
+    (5, '2026-02-12'),
+    (3, '2026-02-15'),
+    (3, '2026-03-05'),
 	(2, '2026-03-08'),
-    	(3, '2026-03-10'),
-    	(1, '2026-03-11'),
-    	(5, '2026-03-11');
+    (3, '2026-03-10'),
+    (1, '2026-03-11'),
+    (5, '2026-03-11');
     
 
 -- Skapar orderrader
@@ -65,10 +65,10 @@ INSERT INTO Orderrader (OrderID, ISBN, Antal, Pris) VALUES
 	(4, 1414, 1, 115),  -- Kund 5 köper 1 "Frankenstein"
 	(5, 1818, 1, 79),   -- Kund 3 köper 1 "Brandkårsmysteriet"
 	(6, 1010, 1, 159),  -- Kund 3 köper 1 "Dr Jekyll & Mr Hyde"
-    	(7, 1414, 1, 149),  -- Kund 2 köper "Partypajaren"
-    	(8, 1010, 1, 159),  -- Kund 3 köper "Dr Jekyll & Mr Hyde" 
+    (7, 1414, 1, 149),  -- Kund 2 köper "Partypajaren"
+    (8, 1010, 1, 159),  -- Kund 3 köper "Dr Jekyll & Mr Hyde" 
 	(9, 1010, 1, 159),  -- Kund 1 köper 1 "Dr Jekyll & Mr Hyde"
-    	(10, 1212, 1, 99);  -- Kund 5 köper 1 "Utvandrarna"
+    (10, 1212, 1, 99);  -- Kund 5 köper 1 "Utvandrarna"
 
 
 -- Hämta data om kunder
@@ -155,7 +155,7 @@ DELIMITER ;
 
 -- Skapa tabell Kundlogg (inför att skapa trigger som loggar när ny kund registreras)
 CREATE TABLE Kundlogg (
-id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     KundID INT,
     Handelse VARCHAR(100),
     Skapad TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -177,11 +177,11 @@ DELIMITER ;
 
 
 -- Skapa backup av databasen i Windows Powershell
-mysqldump -u root -p Bokhandel > bokhandel_backup.sql
+PS C:\Users\Anna Ljungkvist> mysqldump -u root -p Bokhandel > bokhandel_backup.sql
 
 
 -- Återställa databasen från backup i Windows Powershell
-mysqldump -u root -p Bokhandel < bokhandel_backup.sql
+PS C:\Users\Anna Ljungkvist> mysqldump -u root -p Bokhandel < bokhandel_backup.sql
 
 
 -- Testfrågor på den återställda databasen:
