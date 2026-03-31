@@ -176,15 +176,20 @@ END $$
 DELIMITER ;
 
 
--- Skapa backup av databasen i Windows Powershell
+-- Skapa backup av databasen i Kommandotolken
 PS C:\Users\Anna Ljungkvist> mysqldump -u root -p Bokhandel > bokhandel_backup.sql
 
+mysql> mysql -u root -p
 
--- Återställa databasen från backup i Windows Powershell
-PS C:\Users\Anna Ljungkvist> mysqldump -u root -p Bokhandel < bokhandel_backup.sql
+mysql> DROP DATABASE Bokhandel;
 
 
--- Testfrågor på den återställda databasen:
+-- Återställa databasen från backup i Kommandotolken
+mysql> CREATE DATABASE Bokhandel;
+
+mysql> exit
+
+PS C:\Users\Anna Ljungkvist> mysql -u root -p Bokhandel < bokhandel_backup.sql
 
 
 -- Testfråga 1: Hämta all data som finns i kolumnen Forfattare från tabellen Produkter
