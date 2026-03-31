@@ -153,6 +153,16 @@ END $$
 DELIMITER ;
 
 
+-- Test av trigger lageruppdatering
+INSERT INTO Bestallningar (KundID, Datum) VALUES
+	(2, '2026-03-31');           
+    
+INSERT INTO Orderrader (OrderID, ISBN, Antal, Pris) VALUES
+    (11, 1212, 1, 99);          -- Kund 2 köper 1 "Utvandrarna"
+    
+ SELECT * FROM Produkter;   
+
+
 -- Skapa tabell Kundlogg (inför att skapa trigger som loggar när ny kund registreras)
 CREATE TABLE Kundlogg (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -174,6 +184,13 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+
+-- Test av trigger registrering_ny_kund
+INSERT INTO Kunder (Namn, Adress, Telefon, Epost) VALUES
+	('Svea Gunnarsson', 'Myrstigen 91', '0731560921', 'svea.gunnarsson@email.com');
+    
+SELECT * FROM Kundlogg;
 
 
 -- Skapa backup av databasen i Kommandotolken
